@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaa.lee.ftp.mapper.DbUserMapper" >
+  <resultMap id="BaseResultMap" type="com.aaa.lee.ftp.model.DbUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="head_pic" property="headPic" jdbcType="VARCHAR" />
+    <result column="fil_name" property="filName" jdbcType="VARCHAR" />
+    <result column="file_name_original" property="fileNameOriginal" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from db_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aaa.lee.ftp.model.DbUser" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into db_user (username, password, head_pic, 
+      fil_name, file_name_original)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{headPic,jdbcType=VARCHAR}, 
+      #{filName,jdbcType=VARCHAR}, #{fileNameOriginal,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.aaa.lee.ftp.model.DbUser" >
+    update db_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      head_pic = #{headPic,jdbcType=VARCHAR},
+      fil_name = #{filName,jdbcType=VARCHAR},
+      file_name_original = #{fileNameOriginal,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, username, password, head_pic, fil_name, file_name_original
+    from db_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, username, password, head_pic, fil_name, file_name_original
+    from db_user
+  </select>
+  <select id="selectUserByUsernamePassword" parameterType="com.aaa.lee.ftp.model.DbUser" resultMap="BaseResultMap">
+    select * from db_user
+	where username = #{username} and password = #{password}
+  </select>
+  <update id="updateHeadPicById" parameterType="com.aaa.lee.ftp.model.DbUser">
+    update db_user set head_pic = #{headPic} where id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8" />
+    <title>Upload_Ajax</title>
+    <script type="text/javascript" th:src="@{/static/jquery-3.2.1.min.js}"></script>
+    <!--
+            contentType:默认值为application/x-www-form-urlencoded
+                当使用ajax向后端Java代码发送数据的时候，如果发送的数据是简单数据类型(8种基本类型，包装类型)
+                则不需要配置，使用默认值即可
+                如果使用ajax向后端Java代码发送特殊类型(文件类型)，就需要禁用掉contentType的默认值，把值改为false
+
+            processData:默认值为true
+                当使用ajax向后端发送数据(json)的时候，processData默认会把json格式的数据进行序列化，然后以流的形式进行传输
+                如果发送到后端的为文件类型，后端代码是没有功能自动进行组装，所以需要以文件的类型进行发送，所以要禁用掉序列化
+        -->
+    <script type="text/javascript">
+        $(function () {
+            $("#add_pic").click(function () {
+                $("#file_form").append('<input type="file" name="file" />');
+
+            });
+            $("#submit_button").click(function () {
+                $.ajax({
+                    url : "ajaxUpload",
+                    data : new FormData($("#file_form")[0]),
+                    type : "post",
+                    contentType : false,
+                    processData : false,
+                    success :function (data) {
+                        if(data.result) {
+                           var picPath = data.picPath;
+                           $("#show_pic").append("<img src="+picPath+" />");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="file_form">
+        <input type="file" name="file" /> <br />
+        <input id="submit_button" type="button" value="Submit" />
+        <input id="add_pic" type="button" value="add" />
+    </form>
+
+    <div id="show_pic"></div>
+
+</body>
+</html>
